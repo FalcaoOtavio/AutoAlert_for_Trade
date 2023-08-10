@@ -7,7 +7,8 @@ import threading
 telegram = API_Telegram
 bot = telebot.TeleBot(telegram)
 message_queue = queue.Queue()
-
+#Usuários que devem receber as atualizações
+chat_ids = [936629591]
 print('Bot Telegram INICIADO')
 
 @bot.message_handler(commands=['start'])
@@ -35,10 +36,5 @@ def notify(message):
     # Envia a mensagem para a fila de mensagens do AutoTrade.py
     send_notification(notification)
 
-# Inicie a thread para o bot
-bot_thread = threading.Thread(target=bot.polling, daemon=True)
-bot_thread.start()
 
-# Mantenha o loop para processar mensagens da fila, se necessário
-while True:
-    process_message_queue()
+bot.polling(non_stop=True)

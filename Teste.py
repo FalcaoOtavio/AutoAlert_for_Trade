@@ -9,13 +9,14 @@ import threading
 import pandas as pd
 from itertools import compress
 from candle_rankings import candle_rankings
+from datetime import datetime
 
-client =  Client(API_Key,API_Secrect)
-    
-#Symbol
+client = Client(API_Key, API_Secrect)
+
+# Symbol
 trade_symbol1 = 'ETHUSDT'
 
-#Interval
+# Interval
 time_interval = Client.KLINE_INTERVAL_15MINUTE
 closes = []
 
@@ -24,8 +25,6 @@ def on_open(ws):
 
 def on_close(ws):
     print("closed_connection")
-
-chat_ids =[]
 
 # Função chamada quando uma mensagem é recebida pela conexão WebSocket
 def on_message(ws, message):
@@ -73,14 +72,23 @@ def on_message(ws, message):
             elif last_RSI > 70:  # Sobrecomprado
                 send_alert("Atenção! O ativo está sobrecomprado. Possível oportunidade de venda.")
 
+            def recognize_candlestick(df):
+                last_candle = df[-1]
+                if last_candle['open'] < last_candle['close']:
+                    print("Candle de alta")
+                elif last_candle['open'] > last_candle['close']:
+                    print("Candle de baixa")
+                else:
+                    print("Candle neutro")
+
+
+            # Reconhecer padrões de candlestick
+            recognize_candlestick(np_closes)
 
 # Função para enviar movimentações importantes para o Telegram
 def send_alert(message):
     # Use alguma forma de comunicação IPC para enviar a mensagem para o Telegram_BOT.py
     pass
-
-# Crie uma fila de mensagens
-message_queue = queue.Queue()
 
 # Função para enviar movimentações importantes para a fila de mensagens
 def send_notification(message):
@@ -95,6 +103,7 @@ def process_message_queue():
         print(f"Received message: {message}")
 
 # Inicie a thread para processar a fila
+message_queue = queue.Queue()
 message_thread = threading.Thread(target=process_message_queue)
 message_thread.start()
 
