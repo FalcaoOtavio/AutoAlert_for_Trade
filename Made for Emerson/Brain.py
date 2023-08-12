@@ -28,7 +28,10 @@ model.fit(X, y)
 csv_filename = "previsoes.csv"
 
 # Inicializar a API
-exchange = ccxt.binance()
+exchange = ccxt.binance({
+    'rateLimit': 1200,  # Definir a taxa de requisição para 1200 por minuto (20 requisições por segundo)
+    'enableRateLimit': True
+})
 
 # Tolerância para comparação entre previsão e valor real
 tolerancia = 1
@@ -70,12 +73,12 @@ while True:
                 latest_price = ticker['last']
                 break
             except Exception as e:
-                print("Erro de conexão:", e)
+                print("Erro de conexão com Binance:", e)
                 attempts += 1
                 time.sleep(5)  # Aguardar um pouco antes de tentar novamente
 
         if latest_price is None:
-            print("Não foi possível obter o valor do ticker após várias tentativas. Continuando...")
+            print("Não foi possível obter o valor do ticker da Binance após várias tentativas. Continuando...")
             continue
 
         # Prever
