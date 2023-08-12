@@ -116,14 +116,14 @@ while True:
                     comparacoes[fonte] = abs(latest_price - valor_fonte)
             except Exception as e:
                 print(f"Erro ao obter valor da fonte {fonte}:", e)
-        
-        # Remover 'yahoo_finance' da lista de fontes
-        if 'yahoo_finance' in comparacoes:
-            comparacoes.pop('yahoo_finance')
-        
+         
         # Ordenar as fontes por menor diferença em relação ao valor real
         fonte_mais_acurada = min(comparacoes, key=comparacoes.get)
         print("Fonte mais acurada:", fonte_mais_acurada)
+        
+        # Ajustar previsões com base nos erros passados
+        if num_ajustes > 0:
+            y[-num_steps:] = y[-num_steps:] - error
         
         # DataFrame previsões
         future_df = pd.DataFrame({'predicted_price': future_predictions, 'fonte_mais_acurada': [fonte_mais_acurada]})
@@ -132,7 +132,7 @@ while True:
         future_df.to_csv(csv_filename, mode='a', header=False, index=False)
 
         # Atualização
-        time.sleep(100)
+        time.sleep(900)
 
     except Exception as e:
         print("Erro no loop principal:", e)

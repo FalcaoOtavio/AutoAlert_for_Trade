@@ -50,5 +50,5 @@ while True:
         print("Erro ao obter os dados:", e)
 
     # Delay
-    time.sleep(3600)
+    time.sleep(900)
 
