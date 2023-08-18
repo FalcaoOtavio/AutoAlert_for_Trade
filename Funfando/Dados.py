@@ -19,7 +19,7 @@ client = Client(API_Key, API_Secrect)
 
 symbol = "BTCUSDT"
 
-interval = Client.KLINE_INTERVAL_5MINUTE
+interval = Client.KLINE_INTERVAL_15MINUTE
 
 csv_filename = '/home/otavio/Documentos/Programas/Pessoais/AutoAlert_for_Trade/Funfando/Dados.csv'
 
@@ -53,4 +53,4 @@ while True:
         
         print("Rodando...")       
     # Delay
-    time.sleep(300)
+    time.sleep(900)
