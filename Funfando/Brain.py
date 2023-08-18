@@ -12,8 +12,6 @@ import sys
 #sys.path.insert(0, API_Key)
 #from API_Key import API_Telegram
 
-#CHAT_ID = '1365368606'
-
 # Inicialize o bot do Telegram
 #bot = telebot.TeleBot(API_Telegram)
 
